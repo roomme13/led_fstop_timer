@@ -23,7 +23,7 @@ const char *FstopComms::BAD_READ=     "    Bad Read    ";
 const char *FstopComms::CONNECTED=    " Host Connected ";
 const char *FstopComms::CHECKSUM_FAIL=" Checksum Fail  ";
 
-FstopComms::FstopComms(LiquidCrystal &l)
+FstopComms::FstopComms(Adafruit_SSD1306 &l)
     : disp(l)
 {
     lastlcd=lasttx=lastrx=micros();
@@ -86,9 +86,12 @@ void FstopComms::rx(char ch)
     if(buflen >= bufwant){
         if(!connected){
             connected=true;
-            disp.clear();
+            disp.clearDisplay();
+            disp.setTextSize(1); // Draw 2X-scale text
+            disp.setTextColor(SSD1306_WHITE);
             disp.print(CONNECTED);
             lastlcd=lastrx;
+            disp.display();
         }
 
         switch(cmd[0]){

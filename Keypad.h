@@ -21,7 +21,7 @@
 #define _KEYPAD_H_
 
 #include <Arduino.h>
-#include <LiquidCrystal.h>
+#include <Adafruit_SSD1306.h>
 
 /**
  * Debouncing of a single button to generate keypress events.
@@ -143,14 +143,14 @@ public:
         /// @param l output LCD
         /// @param c output column on LCD
         /// @Param r output row on LCD
-        Context(char *b, unsigned ml, LiquidCrystal *l, unsigned char c, unsigned char r);
+        Context(char *b, unsigned ml, Adafruit_SSD1306 *l, unsigned char c, unsigned char r);
 
         /// reset the context (called by setContext())
         void clear();
   
         char * const buffer;        ///< pointer to character storage; alloced elsewhere
         const unsigned maxlen;     ///< max string length (buffer must contain maxlen+1)
-        LiquidCrystal * const lcd;  ///< where to render entered chars
+        Adafruit_SSD1306 * const lcd;  ///< where to render entered chars
         const unsigned lcdc, lcdr; ///< cursor position on LCD to render at
         char exitcode;       ///< KP_B, KP_C or KP_D that terminated the read
     };
@@ -223,7 +223,7 @@ public:
         /// @param r output row on LCD
         /// @param si permit signed numbers
         Context(char *b, unsigned char m, unsigned char p, 
-                LiquidCrystal *l, unsigned char c, unsigned char r,
+                Adafruit_SSD1306 *l, unsigned char c, unsigned char r,
                 bool si);
 
         /// reset the context (called by setContext())
@@ -231,7 +231,7 @@ public:
   
         char *buffer;        ///< pointer to character storage; alloced elsewhere
         const unsigned char mag, prec;
-        LiquidCrystal * const lcd;  ///< where to render entered chars
+        Adafruit_SSD1306 * const lcd;  ///< where to render entered chars
         const unsigned lcdc, lcdr; ///< cursor position on LCD to render at
         char exitcode;       ///< KP_B, KP_C or KP_D that terminated the read
         long result;         ///< fixed-point result, in LSD-counts

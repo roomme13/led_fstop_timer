@@ -18,7 +18,7 @@
 
 #include "Executor.h"
 
-Executor::Executor(LiquidCrystal &l, Keypad &k, ButtonDebounce &b, ButtonDebounce &fs, LEDDriver &led)
+Executor::Executor(Adafruit_SSD1306 &l, Keypad &k, ButtonDebounce &b, ButtonDebounce &fs, LEDDriver &led)
     : disp(l), keys(k), button(b), footswitch(fs), leddriver(led)
 {
     current=NULL;
@@ -57,10 +57,13 @@ void Executor::changePhase(unsigned char ph)
 	execphase = ph;
 
     (*current).getExposure(execphase).display(disp, dispbuf, true);
-    disp.setCursor(18, 2);
+    disp.setTextSize(1); // Draw 2X-scale text
+    disp.setTextColor(SSD1306_WHITE);
+    disp.setCursor(110, 8);
     disp.print(sg ? "S" : " ");
-    disp.setCursor(19, 2);
+    disp.setCursor(120, 8);
     disp.print(dd ? "D" : " ");
+    disp.display();
 }
 
 void Executor::expose()
@@ -153,10 +156,15 @@ void Executor::expose()
 
     if(cancelled){
         // tell user to go home
-        disp.clear();
+        disp.clearDisplay();
+        disp.setTextSize(1); // Draw 2X-scale text
+        disp.setTextColor(SSD1306_WHITE);
+        disp.setCursor(0, 8);
         disp.print("Prog Cancelled");
+        disp.display();
         delay(1000);
         changePhase(0);
+        disp.display();
     }
     else{
         nextPhase();
@@ -173,8 +181,13 @@ void Executor::nextPhase()
         }
     }
 
-    disp.clear();
+    disp.clearDisplay();
+    disp.setTextSize(1); // Draw 2X-scale text
+    disp.setTextColor(SSD1306_WHITE);
+    disp.setCursor(0, 8);
     disp.print("Program Complete");
+    disp.display();
     delay(1000);
     changePhase(0);
+    
 }

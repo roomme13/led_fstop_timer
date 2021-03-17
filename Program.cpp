@@ -218,17 +218,20 @@ bool Program::compileNormal(char dryval, bool splitgrade, Paper& p)
     return true;
 }
 
-void Program::Step::display(LiquidCrystal &disp, char *buf, bool lin)
+void Program::Step::display(Adafruit_SSD1306 &disp, char *buf, bool lin)
 {
     // print text
-    disp.clear();
+    disp.clearDisplay();
+    disp.setTextSize(1); // Draw 2X-scale text
+    disp.setTextColor(SSD1306_WHITE);
     disp.setCursor(0,0);
     disp.print(text);
     displayGrade(disp, buf, lin);
     displayTime(disp, buf, lin);
+    disp.display();
 }
 
-void Program::Step::displayTime(LiquidCrystal &disp, char *buf, bool lin)
+void Program::Step::displayTime(Adafruit_SSD1306 &disp, char *buf, bool lin)
 {
     disp.setCursor(0,2);
 
@@ -260,7 +263,7 @@ void Program::Step::displayTime(LiquidCrystal &disp, char *buf, bool lin)
     }  
 }
 
-void Program::Step::displayGrade(LiquidCrystal &disp, char *buf, bool lin)
+void Program::Step::displayGrade(Adafruit_SSD1306 &disp, char *buf, bool lin)
 {
     disp.setCursor(0,1);
 
@@ -273,17 +276,20 @@ void Program::Step::displayGrade(LiquidCrystal &disp, char *buf, bool lin)
     disp.print(buf);
 }
 
-void Program::Exposure::display(LiquidCrystal &disp, char *buf, bool lin)
+void Program::Exposure::display(Adafruit_SSD1306 &disp, char *buf, bool lin)
 {
     // print text
-    disp.clear();
+    disp.clearDisplay();
+    disp.setTextSize(1); // Draw 2X-scale text
+    disp.setTextColor(SSD1306_WHITE);
     disp.setCursor(0,0);
     disp.print(step->text);
     displayGrade(disp, buf, lin);
     displayTime(disp, buf, lin);
+    disp.display();
 }
 
-void Program::Exposure::displayTime(LiquidCrystal &disp, char *buf, bool lin)
+void Program::Exposure::displayTime(Adafruit_SSD1306 &disp, char *buf, bool lin)
 {
     disp.setCursor(0,2);
 
@@ -314,7 +320,7 @@ void Program::Exposure::displayTime(LiquidCrystal &disp, char *buf, bool lin)
         disp.print(buf);
     }  
 }
-void Program::Exposure::displayGrade(LiquidCrystal &disp, char *buf, bool lin)
+void Program::Exposure::displayGrade(Adafruit_SSD1306 &disp, char *buf, bool lin)
 {
     disp.setCursor(0,1);
 

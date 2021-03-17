@@ -20,7 +20,7 @@
 #define _PROGRAM_H_
 
 #include <Arduino.h>
-#include <LiquidCrystal.h>
+#include <Adafruit_SSD1306.h>
 #include <EEPROM.h>
 #include "Paper.h"
 #include "LEDDriver.h"
@@ -48,10 +48,10 @@ public:
 
       /// render the step settings to the screen (time and text)
       /// @param lin also display linear time (millis)
-      void display(LiquidCrystal &disp, char *buf, bool lin);
+      void display(Adafruit_SSD1306 &disp, char *buf, bool lin);
       /// rended only the time line (bottom row);
-      void displayTime(LiquidCrystal &disp, char *buf, bool lin);
-      void displayGrade(LiquidCrystal &disp, char *buf, bool lin);
+      void displayTime(Adafruit_SSD1306 &disp, char *buf, bool lin);
+      void displayGrade(Adafruit_SSD1306 &disp, char *buf, bool lin);
 
       int stops;               // fixed-point, 1/100ths of a stop
       unsigned char grade;     // grade, ISO Exposure Scale
@@ -62,10 +62,10 @@ public:
     public:
       /// render the exposure settings to the screen (time and text)
 	  /// @param lin also display linear time (millis)
-	  void display(LiquidCrystal &disp, char *buf, bool lin);
+	  void display(Adafruit_SSD1306 &disp, char *buf, bool lin);
 	  /// rended only the time line (bottom row);
-	  void displayTime(LiquidCrystal &disp, char *buf, bool lin);
-	  void displayGrade(LiquidCrystal &disp, char *buf, bool lin);
+	  void displayTime(Adafruit_SSD1306 &disp, char *buf, bool lin);
+	  void displayGrade(Adafruit_SSD1306 &disp, char *buf, bool lin);
 	  unsigned long ms;        // milliseconds to expose (post-compilation, not saved)
 	  unsigned char hardpower; //power for hard step, 0 is full, 255 is off
 	  unsigned char softpower; //power for soft step, 0 is full, 255 is off

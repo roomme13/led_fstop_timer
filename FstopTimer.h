@@ -27,7 +27,7 @@
 #include "Fstopcomms.h"
 #include "Executor.h"
 #include <SD.h>
-#include "TSL2561.h"
+#include <TSL2561.h>
 #include "Paper.h"
 
 /**
@@ -87,7 +87,7 @@ public:
   /// @param p_e exposure pin (high = on)
   /// @param p_p beep pin (not used much)
   /// @param p_bl backlight pin, connect via BC548
-  FstopTimer(LiquidCrystal &l, SMSKeypad &k, RotaryEncoder &r,
+  FstopTimer(Adafruit_SSD1306 &l, SMSKeypad &k, RotaryEncoder &r,
   ButtonDebounce &b,
   ButtonDebounce &fs,
   LEDDriver &led,
@@ -105,7 +105,7 @@ private:
   char inbuf[21];
   char dispbuf[21];
 
-  LiquidCrystal &disp;
+  Adafruit_SSD1306 &disp;
   SMSKeypad &keys;
   RotaryEncoder &rotary;
   ButtonDebounce &button;
@@ -247,4 +247,3 @@ private:
 
 
 #endif // _FSTOP_TIMER_H_
-

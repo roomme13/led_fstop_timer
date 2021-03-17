@@ -20,14 +20,14 @@
 #define _EXECUTOR_H_
 
 #include <Arduino.h>
-#include <LiquidCrystal.h>
+#include <Adafruit_SSD1306.h>
 #include "Keypad.h"
 #include "LEDDriver.h"
 #include "Program.h"
 
 class Executor {
 public:
-  Executor(LiquidCrystal &d, Keypad &k, ButtonDebounce &b, ButtonDebounce &fs, LEDDriver &led);
+  Executor(Adafruit_SSD1306 &d, Keypad &k, ButtonDebounce &b, ButtonDebounce &fs, LEDDriver &led);
 
   void begin();
 
@@ -65,7 +65,7 @@ private:
   /// program we're working on
   Program *current;
 
-  LiquidCrystal &disp;
+  Adafruit_SSD1306 &disp;
   Keypad &keys;
   ButtonDebounce &button;
   ButtonDebounce &footswitch;

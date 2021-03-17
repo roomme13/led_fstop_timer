@@ -1,3 +1,4 @@
+
 /*
     Based on work Copyright (C) 2011 William Brodie-Tyrrell
     william@brodie-tyrrell.org
@@ -26,14 +27,15 @@
 #ifndef _LED_FSTOP_TIMER
 #define _LED_FSTOP_TIMER
 
-#include "Wire.h"
-#include <LiquidCrystal.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <EEPROM.h>
 #include "Keypad.h"
 #include "RotaryEncoder.h"
 #include "FstopTimer.h"
 #include <SD.h>
-#include "TSL2561.h"
+#include <TSL2561.h>
 
 /**
  * Set this according to the vagaries of your rotary encoder
@@ -57,40 +59,18 @@
 
 #define SD_CARD 53
 
-// keypad is 4x4: 3x3 numeric upper left with *0# below that and A-D down the right
-/*
-// separate pins
-#define SCANCOL0 A1    // left column 147*
-#define SCANCOL1 A0
-#define SCANCOL2 8
-#define SCANCOL3 9     // right column ABCD
-*/
-
 // for physical keypad pinout, consider LHS (viewed from front) as pin 1
 // 1-4 = rows starting at top
 // 5-8 = columns starting at left
 #define SCANCOL0 38    // left column 147*
-#define SCANCOL1 24
-#define SCANCOL2 26
-#define SCANCOL3 30     // right column ABCD
+#define SCANCOL1 36
+#define SCANCOL2 34
+#define SCANCOL3 32     // right column ABCD
 
-#define SCANROW0 28    // top row 123A
-#define SCANROW1 32
-#define SCANROW2 34
-#define SCANROW3 36    // bottom row *0#D
-
-// pins for HD44780 in 4-bit mode; RW grounded.
-// #define LCDD7 7
-// #define LCDD6 6
-// #define LCDD5 5
-// #define LCDD4 4
-// #define LCDEN 9
-// #define LCDRS 8
-
-// LCD PINS Using SPI
-#define LCD_DATA 42
-#define LCD_CLK 40
-#define LCD_LATCH 44
+#define SCANROW0 46    // top row 123A
+#define SCANROW1 44
+#define SCANROW2 42
+#define SCANROW3 40    // bottom row *0#D
 
 // 2 and 3 are taken by the rotary encoder - fixed assignment as they
 // require interrupts
@@ -98,8 +78,17 @@
 /**
  * Instances of static interface objects
  */
-// LiquidCrystal disp(0); //I2C
-LiquidCrystal disp(LCD_DATA, LCD_CLK, LCD_LATCH); //SPI
+
+//LiquidCrystal disp(LCDRS, LCDEN, LCDD4, LCDD5, LCDD6, LCDD7);
+//LiquidCrystal disp(LCD_DATA, LCD_CLK, LCD_LATCH); //SPI
+
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 32 // OLED display height, in pixels
+
+// Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
+#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+Adafruit_SSD1306 disp(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 SMSKeypad keys(SCANCOL0, SCANCOL1, SCANCOL2, SCANCOL3, SCANROW0, SCANROW1, SCANROW2, SCANROW3);
 ButtonDebounce expbtn(EXPOSEBTN);
@@ -107,7 +96,8 @@ ButtonDebounce footswitch(FOOTSWITCH);
 RotaryEncoder rotary(ROTARY_REVERSE);
 LEDDriver leddriver(EXPOSE_CENTER_HARD, EXPOSE_CENTER_SOFT, EXPOSE_CORNER_HARD, EXPOSE_CORNER_SOFT, SAFELIGHT_RELAY);
 // all the guts are in this object
-TSL2561 tsl(TSL2561_ADDR_FLOAT); 
+TSL2561 tsl(TSL2561_ADDR_FLOAT);
+
 
 FstopTimer fst(disp, keys, rotary, expbtn, footswitch, leddriver, tsl, BEEP, BACKLIGHT, SD_CARD);
 
@@ -116,17 +106,24 @@ FstopTimer fst(disp, keys, rotary, expbtn, footswitch, leddriver, tsl, BEEP, BAC
  */
 void setup()
 {
+
+    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  if(!disp.begin(SSD1306_SWITCHCAPVCC)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+/*
    // init raw IO for LCD
-   // pinMode(LCDRS, OUTPUT);
-   // pinMode(LCDEN, OUTPUT);
-   // pinMode(LCDD4, OUTPUT);
-   // pinMode(LCDD5, OUTPUT);
-   // pinMode(LCDD6, OUTPUT);
-   // pinMode(LCDD7, OUTPUT);
-   
+   pinMode(LCDRS, OUTPUT);
+   pinMode(LCDEN, OUTPUT);
+   pinMode(LCDD4, OUTPUT);
+   pinMode(LCDD5, OUTPUT);
+   pinMode(LCDD6, OUTPUT);
+   pinMode(LCDD7, OUTPUT);
+  */ 
    Serial.begin(9600);
 
-   disp.begin(20, 4);
+   disp.display();
    leddriver.begin();
    keys.begin();
    rotary.begin();

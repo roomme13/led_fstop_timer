@@ -228,7 +228,7 @@ bool SMSKeypad::poll()
     case KP_D:
         // exit
         ctx->exitcode=ch;
-        ctx->lcd->noCursor();
+//        ctx->lcd->noCursor();
         return true;
     case KP_ASTR:
         // toggle alpha
@@ -307,10 +307,10 @@ void SMSKeypad::showCursor()
     if(micros()-t_last < CHAR_TIMEOUT && len > 0)
         --col;
     ctx->lcd->setCursor(col, ctx->lcdr);
-    ctx->lcd->cursor();  
+//    ctx->lcd->cursor();  
 }
 
-SMSKeypad::Context::Context(char *b, unsigned ml, LiquidCrystal *l, 
+SMSKeypad::Context::Context(char *b, unsigned ml, Adafruit_SSD1306 *l, 
                             unsigned char c, unsigned char r)
     : buffer(b), maxlen(ml), lcd(l), lcdc(c), lcdr(r)
 {
@@ -330,7 +330,7 @@ void SMSKeypad::Context::clear()
 
 
 DecimalKeypad::Context::Context(char *b, unsigned char m, unsigned char p,
-                                LiquidCrystal *l, unsigned char c, unsigned char r,
+                                Adafruit_SSD1306 *l, unsigned char c, unsigned char r,
                                 bool si)
     : buffer(b), mag(m), prec(p), lcd(l), lcdc(c), lcdr(r), result(0L), sign(si)
 {
@@ -410,7 +410,7 @@ void DecimalKeypad::onDigit(char ch)
 
 void DecimalKeypad::show()
 {
-    ctx->lcd->noCursor();
+//    ctx->lcd->noCursor();
     ctx->lcd->setCursor(ctx->lcdc, ctx->lcdr);
 
     char ptr=0;
@@ -455,7 +455,7 @@ void DecimalKeypad::show()
   
     // *phew*
     ctx->lcd->setCursor(ctx->lcdc+ctx->mag+ctx->prec, ctx->lcdr);
-    ctx->lcd->cursor();
+//    ctx->lcd->cursor();
 }
 
 void DecimalKeypad::readComplete(char ch)
@@ -471,5 +471,5 @@ void DecimalKeypad::readComplete(char ch)
 
     ctx->result=val;
     ctx->exitcode=ch;
-    ctx->lcd->noCursor();
+    //ctx->lcd->noCursor();
 }

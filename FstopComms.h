@@ -20,7 +20,7 @@
 #define _FSTOPCOMMS_H_
 
 #include <Arduino.h>
-#include <LiquidCrystal.h>
+#include <Adafruit_SSD1306.h>
 #include <EEPROM.h>
 #include "EEPROMLayout.h"
 
@@ -67,7 +67,7 @@ class FstopComms {
 
 public:
 
-  FstopComms(LiquidCrystal &l);
+  FstopComms(Adafruit_SSD1306 &l);
 
   /// initialise port
   void begin();
@@ -102,7 +102,7 @@ private:
   void respondRead();
   void respondWrite();
 
-  LiquidCrystal &disp;
+  Adafruit_SSD1306 &disp;
   unsigned long lastrx, lasttx, lastlcd;  ///< times of recent events
   bool incmd, connected;                  ///< connection state
   char cmd[PKT_BUFFER];                   ///< data buffer
